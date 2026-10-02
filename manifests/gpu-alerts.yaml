@@ -1,0 +1,48 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-production-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: gpu.rules
+      rules:
+
+        - alert: GPUHighTemperature
+          expr: DCGM_FI_DEV_GPU_TEMP > 75
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU temperature is high"
+            description: "GPU {{ $labels.gpu }} on {{ $labels.hostname }} has exceeded 75°C for 5 minutes."
+
+        - alert: GPUCriticalTemperature
+          expr: DCGM_FI_DEV_GPU_TEMP > 85
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU temperature is critical"
+            description: "GPU {{ $labels.gpu }} on {{ $labels.hostname }} has exceeded 85°C."
+
+        - alert: GPUSustainedHighUtilization
+          expr: DCGM_FI_DEV_GPU_UTIL > 95
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU sustained utilization above 95%"
+            description: "GPU {{ $labels.gpu }} on {{ $labels.hostname }} has remained above 95% utilization."
+
+        - alert: GPUIdle
+          expr: DCGM_FI_DEV_GPU_UTIL < 5
+          for: 30m
+          labels:
+            severity: info
+          annotations:
+            summary: "GPU has been mostly idle"
+            description: "GPU {{ $labels.gpu }} on {{ $labels.hostname }} has remained below 5% utilization for 30 minutes."

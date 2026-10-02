@@ -1,0 +1,17 @@
+spec:
+  template:
+    spec:
+      volumes:
+        - name: plugin-config
+          configMap:
+            name: gpu-timeslicing-config
+
+      containers:
+        - name: nvidia-device-plugin-ctr
+          args:
+            - --config-file=/config/config.yaml
+
+          volumeMounts:
+            - name: plugin-config
+              mountPath: /config
+              readOnly: true

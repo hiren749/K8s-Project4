@@ -1,0 +1,20 @@
+devicePlugin:
+  enabled: false
+
+gfd:
+  enabled: true
+
+nfd:
+  enabled: true
+
+config:
+  map:
+    default: |
+      version: v1
+      sharing:
+        timeSlicing:
+          renameByDefault: false
+          failRequestsGreaterThanOne: true
+          resources:
+            - name: nvidia.com/gpu
+              replicas: 4

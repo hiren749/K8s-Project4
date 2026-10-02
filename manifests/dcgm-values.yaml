@@ -1,0 +1,14 @@
+nodeSelector:
+  accelerator: nvidia
+
+tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 25s
+  additionalLabels:
+    release: monitoring
